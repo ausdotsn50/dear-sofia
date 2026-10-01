@@ -1,0 +1,318 @@
+/* Base styles, surfaces and shared controls. Components add scoped styles on top. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--backdrop);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  min-height: 100vh;
+  background: var(--backdrop);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: 400;
+  font-variation-settings: 'opsz' 14;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+h1,
+h2 {
+  font-weight: 800;
+  font-variation-settings: 'opsz' 96;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--text-h1);
+  line-height: 1.02;
+}
+
+h2 {
+  font-size: var(--text-h2);
+  line-height: 1.08;
+}
+
+h3 {
+  font-size: var(--text-h3);
+  font-weight: 700;
+  font-variation-settings: 'opsz' 24;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+p {
+  max-width: 36rem;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+img,
+svg,
+picture {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+  padding: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Handwriting, only in the places SPEC §5.3 names (plus the wordmark). Never below 22px. */
+.hand {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-variation-settings: normal;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.price {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-2xs);
+  left: var(--space-2xs);
+  z-index: 100;
+  padding: var(--space-2xs) var(--space-s);
+  background: var(--label);
+  color: var(--ink);
+  border-radius: var(--radius-control);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* Layout */
+
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--max-width));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--section-pad);
+}
+
+/* Surfaces set text color and the focus ring for everything inside them */
+
+.surface-backdrop {
+  background: var(--backdrop);
+  color: var(--ink);
+  --text-soft: var(--ink-soft);
+  --focus-ring: var(--brick);
+}
+
+.surface-label {
+  background: var(--label);
+  color: var(--ink);
+  --text-soft: var(--ink-soft);
+  --focus-ring: var(--brick);
+}
+
+.surface-slate {
+  background: var(--slate);
+  color: var(--chalk);
+  --text-soft: var(--chalk-soft);
+  --focus-ring: var(--amber);
+}
+
+.surface-kraft {
+  background: var(--kraft);
+  color: var(--ink);
+  --text-soft: var(--ink);
+  --focus-ring: var(--ink);
+}
+
+.soft {
+  color: var(--text-soft, var(--ink-soft));
+}
+
+/* Buttons: brick on light surfaces, amber on slate (SPEC §5.2) */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  min-height: 48px;
+  padding: 0.625rem 1.375rem;
+  border: 0;
+  border-radius: var(--radius-control);
+  font-weight: 700;
+  font-variation-settings: 'opsz' 18;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn--brick {
+  background: var(--brick);
+  color: var(--label);
+}
+
+.btn--brick:hover {
+  background: var(--brick-deep);
+}
+
+.btn--amber {
+  background: var(--amber);
+  color: var(--ink);
+}
+
+.btn--amber:hover {
+  background: var(--amber-light);
+}
+
+.btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.text-link {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+/* Hot / Iced pills. The border is currentColor so it meets contrast on both surfaces. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.8125rem;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variation-settings: 'opsz' 16;
+  line-height: 1;
+}
+
+.pill svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+
+.surface-backdrop .pill:hover {
+  background: var(--ink);
+  color: var(--backdrop);
+}
+
+.surface-slate .pill:hover {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--ink);
+}
+
+/* The one motion moment (SPEC §5.5): a count that changes ticks once */
+.tick {
+  display: inline-block;
+  animation: tick 160ms var(--ease-out);
+}
+
+@keyframes tick {
+  from {
+    transform: translateY(-40%);
+    opacity: 0.3;
+  }
+}
+
+/* Progressive enhancement: <html> gets .js from an inline script in BaseLayout */
+
+html:not(.js) .js-only {
+  display: none !important;
+}
+
+html.js .no-js-only {
+  display: none !important;
+}
+
+/* Everything off under reduced motion (SPEC §5.5) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

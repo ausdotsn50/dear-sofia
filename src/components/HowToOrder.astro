@@ -1,0 +1,117 @@
+---
+import { Picture } from 'astro:assets';
+import { photo } from '../data/photos';
+import { site } from '../data/site';
+
+const image = photo('iced-drink-to-go');
+const steps = [
+  { title: 'Pick your drinks.', body: 'Add them to your note, hot or iced.' },
+  { title: 'Send the note.', body: 'It opens Messenger with your order already written. Just hit send.' },
+  {
+    title: 'We confirm and brew.',
+    body: 'We’ll reply with your total, payment details and when it’ll be ready.',
+  },
+];
+const { area, fee } = site.delivery;
+---
+
+<section id="ordering" class="ordering section surface-backdrop" aria-labelledby="ordering-title" tabindex="-1">
+  <div class="wrap ordering__grid">
+    <div class="ordering__text">
+      <h2 id="ordering-title">Ordering ahead</h2>
+      <ol class="steps" role="list">
+        {
+          steps.map((step, index) => (
+            <li class="step">
+              <span class="step__number" aria-hidden="true">
+                {index + 1}
+              </span>
+              <p>
+                <strong>{step.title}</strong> {step.body}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+      {
+        area && (
+          <p class="ordering__delivery">
+            Delivery available {area}.{fee && ` Delivery fee: ${fee}.`}
+          </p>
+        )
+      }
+    </div>
+    <Picture
+      src={image.src}
+      alt={image.alt}
+      formats={['avif', 'webp']}
+      widths={[480, 720, 960, 1280]}
+      sizes="(min-width: 1296px) 576px, (min-width: 1024px) 45vw, calc(100vw - 48px)"
+      loading="lazy"
+      decoding="async"
+      class="ordering__photo"
+    />
+  </div>
+</section>
+
+<style>
+  .ordering:focus {
+    outline: none;
+  }
+
+  .ordering__grid {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  .ordering__photo {
+    order: -1;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    object-position: 60% 50%;
+    border-radius: var(--radius-photo);
+  }
+
+  .steps {
+    display: grid;
+    gap: var(--space-m);
+    margin-top: var(--space-l);
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--space-s);
+  }
+
+  .step__number {
+    color: var(--brick);
+    font-size: var(--text-h2);
+    font-weight: 800;
+    font-variation-settings: 'opsz' 96;
+    line-height: 1;
+  }
+
+  .step strong {
+    font-weight: 700;
+  }
+
+  .ordering__delivery {
+    margin-top: var(--space-l);
+    font-weight: 600;
+  }
+
+  @media (min-width: 1024px) {
+    .ordering__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+      gap: var(--space-2xl);
+    }
+
+    .ordering__photo {
+      order: 0;
+    }
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found — Dear Sofia" page="other" noindex>
+  <section class="not-found section surface-slate" aria-labelledby="not-found-title">
+    <div class="wrap not-found__inner">
+      <p class="hand not-found__salutation">Dear friend,</p>
+      <h1 id="not-found-title">This page isn’t on the menu.</h1>
+      <a class="btn btn--amber not-found__button" href="/menu">Back to the menu</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: min(70vh, 640px);
+    display: grid;
+    align-items: center;
+  }
+
+  .not-found__inner {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-s);
+  }
+
+  .not-found__salutation {
+    color: var(--amber);
+    font-size: var(--text-hand);
+  }
+
+  .not-found__button {
+    margin-top: var(--space-s);
+  }
+</style>

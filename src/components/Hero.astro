@@ -1,0 +1,117 @@
+---
+import { Picture } from 'astro:assets';
+import { photo } from '../data/photos';
+import { site } from '../data/site';
+import { buildMessengerUrl, QUESTION_MESSAGE } from '../lib/order-note';
+
+const door = photo('door-push-sign');
+const messageUrl = site.messenger.page ? buildMessengerUrl(site.messenger.page, QUESTION_MESSAGE) : null;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__panel surface-slate">
+    <p class="hero__salutation hand">Dear friend,</p>
+    <h1 id="hero-title">Come in. We’ll make you a good cuppa.</h1>
+    <p class="hero__body soft">
+      Espresso drinks, matcha and tea, hot or iced. Order ahead on Messenger for pickup or delivery,
+      or push the door and stay a while.
+    </p>
+    <div class="hero__actions">
+      <a class="btn btn--amber" href="#menu">Start an order</a>
+      {messageUrl && <a class="text-link" href={messageUrl}>Message us</a>}
+    </div>
+  </div>
+  <div class="hero__photo">
+    <Picture
+      src={door.src}
+      alt={door.alt}
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1280, 1920]}
+      sizes="(min-width: 1024px) 60vw, 100vw"
+      loading="eager"
+      fetchpriority="high"
+      pictureAttributes={{ class: 'hero__picture' }}
+    />
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    background: var(--slate);
+  }
+
+  .hero__panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-s);
+    padding: var(--space-xl) var(--gutter) var(--space-2xl);
+  }
+
+  .hero__salutation {
+    color: var(--amber);
+    font-size: var(--text-hand);
+  }
+
+  .hero__body {
+    max-width: 32rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s) var(--space-m);
+    margin-top: var(--space-2xs);
+  }
+
+  .hero__photo {
+    order: -1;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .hero__photo :global(.hero__picture),
+  .hero__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__photo img {
+    object-fit: cover;
+    object-position: 30% 50%;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .hero__photo {
+      aspect-ratio: 3 / 2;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    /* The panel's text lines up with the page's 1200px content column and takes
+       5/12 of it; the photo bleeds to the right edge. */
+    .hero {
+      --inset: max(var(--gutter), (100% - var(--max-width)) / 2);
+      container-type: inline-size;
+      grid-template-columns: calc(var(--inset) + (100% - 2 * var(--inset)) * 5 / 12) 1fr;
+      min-height: min(88vh, 760px);
+    }
+
+    .hero__panel {
+      padding: var(--space-2xl) var(--space-xl) var(--space-2xl)
+        max(var(--gutter), (100cqw - var(--max-width)) / 2);
+    }
+
+    .hero__photo {
+      order: 0;
+      aspect-ratio: auto;
+    }
+
+    .hero__photo :global(.hero__picture) {
+      height: 100%;
+    }
+  }
+</style>

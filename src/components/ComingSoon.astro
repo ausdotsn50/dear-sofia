@@ -1,0 +1,56 @@
+---
+import WaitlistForm from './WaitlistForm.astro';
+import { site } from '../data/site';
+
+const instagramUrl = site.instagramHandle ? `https://www.instagram.com/${site.instagramHandle}/` : null;
+const social = [
+  site.facebookUrl && { label: 'Facebook', href: site.facebookUrl },
+  instagramUrl && { label: 'Instagram', href: instagramUrl },
+].filter((link) => !!link);
+const waitlistEndpoint = site.waitlist.enabled ? site.waitlist.endpoint : null;
+---
+
+<section class="coming-soon section surface-kraft" aria-labelledby="coming-soon-title">
+  <div class="wrap coming-soon__inner">
+    <h2 id="coming-soon-title">Take some home, soon</h2>
+    <p>
+      We’re working on beans and a few things to take home.{social.length > 0 && ' Follow us to hear first.'}
+    </p>
+    {
+      social.length > 0 && (
+        <ul class="coming-soon__links" role="list">
+          {social.map((link) => (
+            <li>
+              <a href={link.href} rel="me">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {waitlistEndpoint && <WaitlistForm endpoint={waitlistEndpoint} />}
+  </div>
+</section>
+
+<style>
+  .coming-soon__inner {
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .coming-soon__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-l);
+  }
+
+  .coming-soon__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+</style>

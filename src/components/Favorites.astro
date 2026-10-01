@@ -1,0 +1,89 @@
+---
+import { Picture } from 'astro:assets';
+import AddButtons from './AddButtons.astro';
+import { photos } from '../data/photos';
+import { formatPeso } from '../lib/format';
+import { allItems, menu } from '../lib/menu';
+
+// Every favorite that has a photo, in menu order (SPEC §6.1).
+const favorites = allItems(menu).filter((item) => item.favorite && item.photo && photos[item.photo]);
+---
+
+<section class="favorites section surface-backdrop" aria-labelledby="favorites-title">
+  <div class="wrap">
+    <h2 id="favorites-title">House favorites</h2>
+    <p class="favorites__intro soft">The ones people come back for.</p>
+    <ul class="favorites__grid" role="list">
+      {
+        favorites.map((item) => {
+          const image = photos[item.photo!]!;
+          return (
+            <li class="favorite">
+              <Picture
+                src={image.src}
+                alt={image.alt}
+                formats={['avif', 'webp']}
+                widths={[320, 480, 640]}
+                sizes="(min-width: 1296px) 282px, (min-width: 1024px) calc((100vw - 168px) / 4), (min-width: 768px) calc((100vw - 128px) / 2), calc((100vw - 64px) / 2)"
+                loading="lazy"
+                decoding="async"
+                class="favorite__photo"
+              />
+              <h3 class="favorite__name">{item.name}</h3>
+              <p class="favorite__price">
+                {item.price === null ? <span class="soft">Ask us</span> : <span class="price">{formatPeso(item.price)}</span>}
+              </p>
+              <AddButtons item={item} temps={item.temps} />
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .favorites__intro {
+    margin-top: var(--space-2xs);
+  }
+
+  .favorites__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-l) var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  .favorite {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2xs);
+  }
+
+  .favorite__photo {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-photo);
+  }
+
+  .favorite__name {
+    margin-top: var(--space-2xs);
+  }
+
+  .favorite__price {
+    font-weight: 600;
+  }
+
+  @media (min-width: 768px) {
+    .favorites__grid {
+      gap: var(--space-xl) var(--space-l);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .favorites__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

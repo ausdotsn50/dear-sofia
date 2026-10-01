@@ -1,0 +1,73 @@
+---
+// Only rendered when site.waitlist.enabled is true. Without JavaScript the form
+// posts straight to the endpoint.
+interface Props {
+  endpoint: string;
+}
+
+const { endpoint } = Astro.props;
+---
+
+<form class="waitlist" action={endpoint} method="post" data-waitlist>
+  <label for="waitlist-email">Email</label>
+  <div class="waitlist__row">
+    <input id="waitlist-email" name="email" type="email" autocomplete="email" required />
+    <button type="submit" class="btn btn--brick">Notify me</button>
+  </div>
+  <p class="waitlist__status" role="status" data-waitlist-status></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-waitlist]');
+  const status = form?.querySelector<HTMLElement>('[data-waitlist-status]');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!status) return;
+    status.textContent = '';
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      if (!response.ok) throw new Error(String(response.status));
+      form.reset();
+      status.textContent = 'You’re on the list. We’ll email you when it’s ready.';
+    } catch {
+      status.textContent = 'That didn’t go through. Check the email address and try again.';
+    }
+  });
+</script>
+
+<style>
+  .waitlist {
+    display: grid;
+    gap: var(--space-2xs);
+    max-width: 32rem;
+    margin-top: var(--space-2xs);
+  }
+
+  .waitlist label {
+    font-weight: 600;
+  }
+
+  .waitlist__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  .waitlist input {
+    flex: 1 1 14rem;
+    min-height: 48px;
+    padding: 0.5rem 0.75rem;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--radius-control);
+    background: var(--label);
+  }
+
+  .waitlist__status {
+    font-weight: 600;
+  }
+</style>

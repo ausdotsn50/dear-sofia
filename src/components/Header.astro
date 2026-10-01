@@ -1,0 +1,181 @@
+---
+import { site } from '../data/site';
+import { buildMessengerUrl, QUESTION_MESSAGE } from '../lib/order-note';
+import { navLinks, type PageKind } from '../lib/nav';
+
+interface Props {
+  page: PageKind;
+}
+
+const { page } = Astro.props;
+const links = navLinks(page);
+const messageUrl = site.messenger.page ? buildMessengerUrl(site.messenger.page, QUESTION_MESSAGE) : null;
+---
+
+<header class="site-header surface-backdrop">
+  <div class="wrap site-header__inner">
+    <a class="wordmark hand" href="/" aria-label="Dear Sofia, home">Dear Sofia,</a>
+    <nav class="site-nav" aria-label="Main">
+      <button
+        type="button"
+        class="site-nav__toggle js-only"
+        aria-expanded="false"
+        aria-controls="site-nav-list"
+      >
+        Menu
+      </button>
+      <ul class="site-nav__list" id="site-nav-list" role="list">
+        {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+      </ul>
+    </nav>
+    {messageUrl && <a class="btn btn--brick site-header__cta" href={messageUrl}>Message us</a>}
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.site-nav__toggle');
+  const list = document.getElementById('site-nav-list');
+
+  if (toggle && list) {
+    const setOpen = (open: boolean) => toggle.setAttribute('aria-expanded', String(open));
+    const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    toggle.addEventListener('click', () => setOpen(!isOpen()));
+    list.addEventListener('click', (event) => {
+      if ((event.target as Element).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isOpen()) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (isOpen() && !(event.target as Element).closest('.site-nav')) setOpen(false);
+    });
+  }
+</script>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 20;
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    min-height: 76px;
+    padding-block: var(--space-xs);
+  }
+
+  .wordmark {
+    margin-right: auto;
+    font-size: 30px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .site-nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs) var(--space-m);
+  }
+
+  .site-nav__list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .site-nav__list a:hover {
+    text-decoration: underline;
+  }
+
+  .site-nav__toggle {
+    min-height: 44px;
+    padding: 0 0.875rem;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--radius-control);
+    background: transparent;
+    font-weight: 600;
+  }
+
+  .site-nav__toggle[aria-expanded='true'] {
+    background: var(--ink);
+    color: var(--backdrop);
+  }
+
+  .site-header__cta {
+    min-height: 44px;
+    padding-inline: 1rem;
+    white-space: nowrap;
+  }
+
+  /* Wordmark, Menu and Message us share one row down to 360px */
+  @media (max-width: 399px) {
+    .site-header__inner {
+      gap: var(--space-2xs);
+    }
+
+    .site-nav__toggle {
+      padding-inline: 0.625rem;
+    }
+
+    .site-header__cta {
+      padding-inline: 0.75rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .site-nav__toggle {
+      display: none;
+    }
+
+    .site-header__inner {
+      gap: var(--space-l);
+    }
+
+    .site-nav__list {
+      gap: var(--space-l);
+    }
+  }
+
+  @media (max-width: 767px) {
+    /* Without JavaScript the links stay visible under the wordmark. */
+    html:not(.js) .site-header__inner {
+      flex-wrap: wrap;
+    }
+
+    html:not(.js) .site-nav {
+      order: 3;
+      flex-basis: 100%;
+    }
+
+    html.js .site-nav__list {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      padding: var(--space-2xs) var(--gutter) var(--space-s);
+      background: var(--backdrop);
+      border-bottom: 1.5px solid var(--ink);
+    }
+
+    html.js .site-nav__toggle[aria-expanded='true'] + .site-nav__list {
+      display: flex;
+    }
+
+    html.js .site-nav__list a {
+      width: 100%;
+      min-height: 48px;
+      font-size: 1.25rem;
+    }
+  }
+</style>

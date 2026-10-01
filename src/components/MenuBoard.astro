@@ -1,0 +1,174 @@
+---
+import MenuList from './MenuList.astro';
+import OrderBar from './OrderBar.astro';
+import OrderNote from './OrderNote.astro';
+import { site } from '../data/site';
+import { formatPeso } from '../lib/format';
+import { menu } from '../lib/menu';
+
+interface Props {
+  /** 2 on the home page; 1 on /menu, where "The menu" is the page title. */
+  level?: 1 | 2;
+}
+
+const { level = 2 } = Astro.props;
+const Heading = `h${level}` as 'h1' | 'h2';
+const SubHeading = `h${level + 1}` as 'h2' | 'h3';
+const [firstCategory, ...otherCategories] = menu.categories;
+const showDevWarning = import.meta.env.DEV && site.messenger.page === null;
+---
+
+<section id="menu" class="menu-board surface-slate section" aria-labelledby="menu-title" tabindex="-1">
+  <div class="wrap">
+    <div class="menu-board__intro">
+      <Heading id="menu-title">The menu</Heading>
+      <p class="soft">
+        Everything comes hot or iced.<span class="js-only"> Tap Hot or Iced to add a drink.</span>
+      </p>
+      {
+        showDevWarning && (
+          <p class="menu-board__dev">
+            Dev only: <code>site.messenger.page</code> is not set in <code>src/data/site.ts</code>, so the
+            note can be copied but not sent, and the no-JS Order links are hidden.
+          </p>
+        )
+      }
+    </div>
+
+    <div class="menu-board__grid">
+      {firstCategory && (
+        <div class="menu-board__col">
+          <MenuList category={firstCategory} level={level + 1} />
+        </div>
+      )}
+      <div class="menu-board__col">
+        {otherCategories.map((category) => <MenuList category={category} level={level + 1} />)}
+        <section class="menu-extras" aria-labelledby="extras-title">
+          <SubHeading id="extras-title" class="menu-extras__title">Extras</SubHeading>
+          <ul class="menu-extras__list" role="list">
+            {
+              menu.extras.map((extra) => (
+                <li class="menu-extras__row">
+                  <span>{extra.name}</span>
+                  <span class="menu-extras__leader" aria-hidden="true" />
+                  {extra.price === null ? (
+                    <span class="soft">Ask us</span>
+                  ) : (
+                    <span class="price menu-extras__price">{formatPeso(extra.price)}</span>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="menu-extras__hint soft js-only">Add extras to any drink from your note.</p>
+        </section>
+      </div>
+      <aside class="menu-board__note js-only" aria-labelledby="note-title" data-note-home>
+        <OrderNote level={level + 1} />
+      </aside>
+    </div>
+  </div>
+  <OrderBar />
+</section>
+
+<style>
+  .menu-board:focus {
+    outline: none;
+  }
+
+  .menu-board__intro {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .menu-board__dev {
+    max-width: 44rem;
+    margin-top: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-xs);
+    border: 1.5px dashed var(--amber);
+    border-radius: var(--radius-control);
+    font-size: var(--text-small);
+  }
+
+  .menu-board__grid {
+    display: grid;
+    gap: var(--space-xl) var(--space-l);
+    margin-top: var(--space-xl);
+  }
+
+  .menu-board__col {
+    display: grid;
+    align-content: start;
+    gap: var(--space-xl);
+    min-width: 0;
+  }
+
+  .menu-extras__title {
+    font-size: var(--text-h3);
+    font-weight: 700;
+    font-variation-settings: 'opsz' 24;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .menu-extras__list {
+    margin-top: var(--space-xs);
+  }
+
+  .menu-extras__row {
+    display: flex;
+    align-items: baseline;
+    padding-block: var(--space-3xs);
+    font-weight: 600;
+    font-variation-settings: 'opsz' 18;
+  }
+
+  .menu-extras__row .soft {
+    font-weight: 500;
+  }
+
+  .menu-extras__leader {
+    flex: 1 1 1.5rem;
+    margin-inline: 0.5em;
+    border-bottom: 2px dotted var(--chalk-soft);
+    transform: translateY(-0.3em);
+  }
+
+  .menu-extras__price {
+    color: var(--amber);
+  }
+
+  .menu-extras__hint {
+    margin-top: var(--space-xs);
+    font-size: var(--text-small);
+  }
+
+  @media (min-width: 768px) {
+    .menu-board__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .menu-board__note {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    html.js .menu-board__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(20rem, 1fr);
+    }
+
+    html.js .menu-board__note {
+      display: block;
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      /* room for the note's shadow and focus rings inside the scroll box */
+      margin: -12px;
+      padding: 12px;
+    }
+  }
+</style>

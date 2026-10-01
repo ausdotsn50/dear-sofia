@@ -1,0 +1,156 @@
+---
+import { Picture } from 'astro:assets';
+import { photo } from '../data/photos';
+import { site } from '../data/site';
+import { formatTime } from '../lib/format';
+
+const cups = photo('kraft-cups-chalkboard');
+const drinkBlock = photo('cappuccino-drink-block-kapestetik');
+const addressLines = [site.address.street, site.address.city].filter((line) => !!line);
+---
+
+<section id="visit" class="visit section surface-backdrop" aria-labelledby="visit-title" tabindex="-1">
+  <div class="wrap visit__grid">
+    <div class="visit__text">
+      <h2 id="visit-title">Come by</h2>
+      <p>Push the door, pick a seat and stay as long as you like.</p>
+
+      {
+        addressLines.length > 0 && (
+          <div class="visit__detail">
+            <h3>Address</h3>
+            <address>
+              {addressLines.map((line) => (
+                <span class="visit__line">{line}</span>
+              ))}
+            </address>
+          </div>
+        )
+      }
+
+      {
+        site.hours && (
+          <div class="visit__detail">
+            <h3>Hours</h3>
+            <ul role="list">
+              {site.hours.map((row) => (
+                <li>
+                  {row.days}, {formatTime(row.open)} to {formatTime(row.close)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        site.address.mapsUrl && (
+          <a class="btn btn--brick visit__directions" href={site.address.mapsUrl}>
+            Get directions
+          </a>
+        )
+      }
+    </div>
+
+    <Picture
+      src={cups.src}
+      alt={cups.alt}
+      formats={['avif', 'webp']}
+      widths={[320, 480, 720, 960]}
+      sizes="(min-width: 1296px) 372px, (min-width: 1024px) 31vw, calc(50vw - 30px)"
+      loading="lazy"
+      decoding="async"
+      class="visit__square"
+    />
+
+    <figure class="visit__tall">
+      <Picture
+        src={drinkBlock.src}
+        alt={drinkBlock.alt}
+        formats={['avif', 'webp']}
+        widths={[280, 420, 560, 840]}
+        sizes="(min-width: 1296px) 278px, (min-width: 1024px) 23vw, calc(50vw - 30px)"
+        loading="lazy"
+        decoding="async"
+        class="visit__tall-photo"
+      />
+      <figcaption class="soft">Photo by @kapestetik</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .visit:focus {
+    outline: none;
+  }
+
+  .visit__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: var(--space-l) var(--space-s);
+  }
+
+  .visit__text {
+    grid-column: 1 / -1;
+    display: grid;
+    justify-items: start;
+    gap: var(--space-s);
+  }
+
+  .visit__detail {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .visit__detail h3 {
+    font-size: var(--text-body);
+    font-variation-settings: 'opsz' 18;
+    letter-spacing: 0;
+  }
+
+  .visit__line {
+    display: block;
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  .visit__directions {
+    margin-top: var(--space-2xs);
+  }
+
+  .visit__square,
+  .visit__tall-photo {
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-photo);
+  }
+
+  .visit__square {
+    aspect-ratio: 1;
+  }
+
+  /* Natural 9:16 ratio, uncropped, so the creator's watermark stays intact */
+  .visit__tall-photo {
+    aspect-ratio: 1141 / 2048;
+    object-position: 50% 60%;
+  }
+
+  .visit__tall figcaption {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-small);
+  }
+
+  @media (min-width: 1024px) {
+    .visit__grid {
+      grid-template-columns: 5fr 4fr 3fr;
+      gap: var(--space-l);
+    }
+
+    .visit__text {
+      grid-column: auto;
+    }
+  }
+</style>

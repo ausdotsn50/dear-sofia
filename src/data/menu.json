@@ -1,0 +1,46 @@
+{
+  "_source": "Transcribed from the soft-opening menu card (reference/menu-card-soft-opening.jpg). Names keep the card's spelling. price: null means the price was not visible in the photo and must be confirmed with the owner before launch. Never invent a price.",
+  "_photoNote": "photo = file name (without .jpg) in src/assets/photos. photoConfirmed: false means we guessed which drink the photo shows; confirm with the owner and move the photo if needed.",
+  "updated": "2026-09-29",
+  "currency": "PHP",
+  "categories": [
+    {
+      "id": "coffee",
+      "name": "Coffee",
+      "note": "Served hot or iced",
+      "temps": ["hot", "iced"],
+      "items": [
+        { "id": "cafe-americano", "name": "Cafe Americano", "price": 100, "favorite": false },
+        { "id": "flat-white", "name": "Flat White", "price": 150, "favorite": false },
+        { "id": "caffe-mocha", "name": "Caffe Mocha", "price": 170, "favorite": true, "photo": "iced-mocha-studio", "photoConfirmed": false },
+        { "id": "chocolate-hazelnut", "name": "Chocolate Hazelnut", "price": 170, "favorite": true },
+        { "id": "cappuccino", "name": "Cappuccino", "price": 150, "favorite": false },
+        { "id": "spanish-latte", "name": "Spanish Latte", "price": 160, "favorite": true, "photo": "espresso-pour-iced-latte", "photoConfirmed": false },
+        { "id": "caramel-macchiato", "name": "Caramel Macchiato", "price": 170, "favorite": true, "photo": "iced-caramel-swirl-studio", "photoConfirmed": false },
+        { "id": "caffe-latte", "name": "Caffe Latte", "price": 150, "favorite": false },
+        { "id": "white-chocolate-mocha", "name": "White Chocolate Mocha", "price": 170, "favorite": false },
+        { "id": "dirty-matcha-latte", "name": "Dirty Matcha Latte", "price": 210, "favorite": false },
+        { "id": "dalgona-coffee", "name": "Dalgona Coffee", "price": 150, "favorite": false }
+      ]
+    },
+    {
+      "id": "not-coffee",
+      "name": "Not coffee",
+      "note": "Served hot or iced",
+      "temps": ["hot", "iced"],
+      "items": [
+        { "id": "hot-chocolate", "name": "Hot Chocolate", "price": null, "favorite": true },
+        { "id": "honey-citron-tea", "name": "Honey Citron Tea", "price": null, "favorite": false },
+        { "id": "green-tea-mint", "name": "Green Tea & Mint", "price": null, "favorite": false },
+        { "id": "english-breakfast-tea", "name": "English Breakfast Tea", "price": null, "favorite": false },
+        { "id": "matcha-latte", "name": "Matcha Latte", "price": null, "favorite": true, "photo": "matcha-latte-heart", "photoConfirmed": false },
+        { "id": "dalgona-choco", "name": "Dalgona Choco", "price": null, "favorite": false }
+      ]
+    }
+  ],
+  "extras": [
+    { "id": "oat-milk", "name": "Oat milk", "price": null },
+    { "id": "espresso-shot", "name": "Espresso shot", "price": null },
+    { "id": "extra-syrup", "name": "Extra syrup", "price": null }
+  ]
+}

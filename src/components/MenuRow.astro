@@ -1,0 +1,88 @@
+---
+import AddButtons from './AddButtons.astro';
+import { formatPeso } from '../lib/format';
+import type { MenuItem, Temp } from '../lib/menu';
+
+interface Props {
+  item: MenuItem;
+  temps: Temp[];
+}
+
+const { item, temps } = Astro.props;
+---
+
+<li class="menu-row">
+  <p class="menu-row__line">
+    <span class="menu-row__name">
+      {
+        item.favorite && (
+          <>
+            <svg class="menu-row__heart" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21.2s-8.8-5.4-9.7-11.4C1.7 6.1 4.2 3.4 7.4 3.4c2 0 3.7 1.1 4.6 2.8.9-1.7 2.6-2.8 4.6-2.8 3.2 0 5.7 2.7 5.1 6.4-.9 6-9.7 11.4-9.7 11.4Z" />
+            </svg>
+            <span class="visually-hidden">House favorite: </span>
+          </>
+        )
+      }
+      {item.name}
+    </span>
+    <span class="menu-row__leader" aria-hidden="true"></span>
+    {
+      item.price === null ? (
+        <span class="menu-row__ask soft">Ask us</span>
+      ) : (
+        <span class="menu-row__price price">{formatPeso(item.price)}</span>
+      )
+    }
+  </p>
+  <AddButtons item={item} temps={temps} />
+</li>
+
+<style>
+  .menu-row {
+    display: grid;
+    gap: var(--space-2xs);
+    padding-block: var(--space-xs);
+  }
+
+  .menu-row__line {
+    display: flex;
+    align-items: last baseline;
+    max-width: none;
+    font-weight: 600;
+    font-variation-settings: 'opsz' 18;
+    line-height: 1.35;
+  }
+
+  .menu-row__name {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4em;
+    min-width: 0;
+  }
+
+  .menu-row__heart {
+    flex: none;
+    align-self: center;
+    width: 0.95em;
+    height: 0.95em;
+    fill: var(--amber);
+  }
+
+  .menu-row__leader {
+    flex: 1 1 1.5rem;
+    min-width: 1.5rem;
+    margin-inline: 0.5em;
+    border-bottom: 2px dotted var(--chalk-soft);
+    transform: translateY(-0.3em);
+  }
+
+  .menu-row__price {
+    color: var(--amber);
+  }
+
+  .menu-row__ask {
+    font-weight: 500;
+    white-space: nowrap;
+  }
+</style>

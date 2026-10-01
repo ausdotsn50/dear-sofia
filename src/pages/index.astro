@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ComingSoon from '../components/ComingSoon.astro';
+import Favorites from '../components/Favorites.astro';
+import Hero from '../components/Hero.astro';
+import HowToOrder from '../components/HowToOrder.astro';
+import MenuBoard from '../components/MenuBoard.astro';
+import SignOff from '../components/SignOff.astro';
+import Visit from '../components/Visit.astro';
+import { site } from '../data/site';
+
+const city = site.address.city;
+const title = `Dear Sofia — Coffee, matcha and tea${city ? ` in ${city}` : ''}`;
+---
+
+<BaseLayout title={title} page="home">
+  <Hero />
+  <Favorites />
+  <MenuBoard />
+  <HowToOrder />
+  <Visit />
+  <ComingSoon />
+  <SignOff />
+</BaseLayout>

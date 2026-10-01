@@ -1,0 +1,39 @@
+---
+import MenuRow from './MenuRow.astro';
+import type { MenuCategory } from '../lib/menu';
+
+interface Props {
+  category: MenuCategory;
+  level?: number;
+}
+
+const { category, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+
+<section class="menu-list" aria-labelledby={`category-${category.id}`}>
+  <Heading id={`category-${category.id}`} class="menu-list__title">{category.name}</Heading>
+  <p class="menu-list__note soft">{category.note}</p>
+  <ul class="menu-list__rows" role="list">
+    {category.items.map((item) => <MenuRow item={item} temps={category.temps} />)}
+  </ul>
+</section>
+
+<style>
+  .menu-list__title {
+    font-size: var(--text-h3);
+    font-weight: 700;
+    font-variation-settings: 'opsz' 24;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .menu-list__note {
+    margin-top: var(--space-3xs);
+    font-size: var(--text-small);
+  }
+
+  .menu-list__rows {
+    margin-top: var(--space-xs);
+  }
+</style>

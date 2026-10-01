@@ -1,0 +1,98 @@
+---
+import { site } from '../data/site';
+
+const phoneHref = site.phone ? `tel:${site.phone.replace(/[^\d+]/g, '')}` : null;
+---
+
+<section class="signoff section surface-slate" aria-labelledby="signoff-title">
+  <div class="wrap signoff__grid">
+    <div class="signoff__text">
+      <h2 id="signoff-title" class="signoff__title">
+        <span class="hand signoff__love">Much love,</span>
+        <span class="signoff__name">Dear Sofia</span>
+      </h2>
+      <div class="signoff__actions">
+        <a class="btn btn--amber" href="#menu">Start an order</a>
+        {
+          site.phone && phoneHref && (
+            <p class="signoff__call">
+              Or call <a href={phoneHref}>{site.phone}</a>
+            </p>
+          )
+        }
+      </div>
+    </div>
+
+    <figure class="signoff__preview">
+      <div class="preview surface-label">
+        <p>Hi Dear Sofia! I’d like to order:</p>
+        <p>• [drink, hot or iced]</p>
+        <p>
+          Name: [your name]<br />
+          Pickup, delivery or for here: [choose one]<br />
+          Time: [time]
+        </p>
+      </div>
+      <figcaption class="soft">What a message to us looks like.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .signoff__grid {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .signoff__title {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .signoff__love {
+    color: var(--amber);
+    font-size: 48px;
+  }
+
+  .signoff__name {
+    color: var(--chalk);
+  }
+
+  .signoff__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s) var(--space-m);
+    margin-top: var(--space-l);
+  }
+
+  .signoff__call a {
+    font-weight: 700;
+  }
+
+  .preview {
+    display: grid;
+    gap: var(--space-s);
+    max-width: 30rem;
+    padding: var(--space-m);
+    border-radius: var(--radius-note);
+    box-shadow: var(--shadow-note);
+  }
+
+  .preview p {
+    max-width: none;
+  }
+
+  .signoff__preview figcaption {
+    margin-top: var(--space-xs);
+    font-size: var(--text-small);
+  }
+
+  @media (min-width: 1024px) {
+    .signoff__grid {
+      grid-template-columns: 5fr 6fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

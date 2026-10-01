@@ -1,0 +1,79 @@
+---
+// Hot / Iced add buttons for one drink. Without JavaScript they are hidden and a
+// single Order link opens Messenger with that drink prefilled instead.
+import { site } from '../data/site';
+import type { MenuItem, Temp } from '../lib/menu';
+import { buildMessengerUrl, buildSingleItemMessage } from '../lib/order-note';
+
+interface Props {
+  item: MenuItem;
+  temps: Temp[];
+}
+
+const { item, temps } = Astro.props;
+const orderUrl = site.messenger.page
+  ? buildMessengerUrl(site.messenger.page, buildSingleItemMessage(item, temps))
+  : null;
+const label = (temp: Temp) => temp.charAt(0).toUpperCase() + temp.slice(1);
+---
+
+<div class="add-buttons js-only">
+  {
+    temps.map((temp) => (
+      <button
+        type="button"
+        class="pill"
+        data-add={item.id}
+        data-temp={temp}
+        aria-label={`Add ${item.name}, ${temp}, to your note`}
+      >
+        <svg class="add-buttons__plus" viewBox="0 0 12 12" aria-hidden="true">
+          <path d="M6 1.5v9M1.5 6h9" />
+        </svg>
+        <svg class="add-buttons__check" viewBox="0 0 12 12" aria-hidden="true">
+          <path d="M1.8 6.4 4.6 9.2 10.2 2.8" />
+        </svg>
+        {label(temp)}
+      </button>
+    ))
+  }
+</div>
+{
+  orderUrl && (
+    <a class="text-link add-buttons__order no-js-only" href={orderUrl}>
+      Order<span class="visually-hidden"> {item.name}</span>
+    </a>
+  )
+}
+
+<style>
+  .add-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  .add-buttons svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Brief confirmation after adding, set by order-note-ui.ts */
+  .add-buttons__check,
+  .is-added .add-buttons__plus {
+    display: none;
+  }
+
+  .is-added .add-buttons__check {
+    display: block;
+  }
+
+  .add-buttons__order {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+</style>

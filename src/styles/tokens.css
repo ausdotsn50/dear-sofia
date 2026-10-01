@@ -1,0 +1,66 @@
+/* Design tokens. Every color and type size in the site comes from here (SPEC §5). */
+
+:root {
+  color-scheme: light;
+
+  /* Palette, sampled from the photos (SPEC §5.2) */
+  --backdrop: #E3E3DF;   /* page background */
+  --label: #FBFBF8;      /* order note, fields, light panels */
+  --ink: #1F1A16;        /* text on light surfaces */
+  --ink-soft: #57504A;   /* secondary text on light surfaces */
+  --slate: #2E3134;      /* chalkboard surfaces */
+  --chalk: #ECEAE3;      /* text on slate */
+  --chalk-soft: #B4B2AB; /* secondary text on slate */
+  --kraft: #B98D5C;      /* fills only, never text */
+  --brick: #8B2E1D;      /* primary action on light surfaces */
+  --amber: #E9B869;      /* on slate only */
+
+  --brick-deep: color-mix(in srgb, var(--brick) 82%, var(--ink));
+  --amber-light: color-mix(in srgb, var(--amber) 80%, var(--label));
+  --scrim: rgba(31, 26, 22, 0.55);
+  --shadow-note: 0 1px 0 rgba(31, 26, 22, 0.08), 0 8px 24px -12px rgba(31, 26, 22, 0.25);
+  --shadow-bar: 0 -8px 24px -16px rgba(31, 26, 22, 0.6);
+
+  /* Type (SPEC §5.3). Sizes run from 360px to 1440px viewports. */
+  --font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-hand: 'Patrick Hand', 'Segoe Print', 'Bradley Hand', cursive;
+
+  --text-h1: clamp(2.75rem, 2.1667rem + 2.5926vw, 4.5rem);      /* 44 → 72 */
+  --text-h2: clamp(2.25rem, 2rem + 1.1111vw, 3rem);             /* 36 → 48 */
+  --text-h3: clamp(1.3125rem, 1.25rem + 0.2778vw, 1.5rem);      /* 21 → 24 */
+  --text-body: clamp(1.0625rem, 1.0417rem + 0.0926vw, 1.125rem); /* 17 → 18 */
+  --text-small: 0.875rem;                                        /* 14 */
+  --text-hand: clamp(1.875rem, 1.75rem + 0.5556vw, 2.25rem);    /* 30 → 36 */
+
+  /* Space */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --section-pad: clamp(4rem, 2.6667rem + 3.7037vw, 6.5rem);
+
+  /* Layout (SPEC §5.4) */
+  --max-width: 1200px;
+  --gutter: 24px;
+
+  /* Radius is tied to what the object is */
+  --radius-note: 8px;
+  --radius-control: 6px;
+  --radius-photo: 2px;
+  --radius-pill: 999px;
+
+  /* Focus ring color follows the surface: brick on light, amber on slate */
+  --focus-ring: var(--brick);
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 48px;
+  }
+}

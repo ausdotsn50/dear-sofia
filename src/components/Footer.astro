@@ -1,0 +1,126 @@
+---
+import Seal from './Seal.astro';
+import { site } from '../data/site';
+import { formatTime } from '../lib/format';
+import { navLinks, type PageKind } from '../lib/nav';
+
+interface Props {
+  page: PageKind;
+}
+
+const { page } = Astro.props;
+const links = navLinks(page);
+const instagramUrl = site.instagramHandle ? `https://www.instagram.com/${site.instagramHandle}/` : null;
+const social = [
+  site.facebookUrl && { label: 'Facebook', href: site.facebookUrl },
+  instagramUrl && { label: 'Instagram', href: instagramUrl },
+].filter((link) => !!link);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer surface-backdrop">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <Seal size={88} />
+      <a class="wordmark hand" href="/" aria-label="Dear Sofia, home">Dear Sofia,</a>
+    </div>
+
+    <nav class="site-footer__col" aria-label="Footer">
+      <ul role="list">
+        {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+      </ul>
+    </nav>
+
+    {
+      social.length > 0 && (
+        <ul class="site-footer__col" role="list" aria-label="Follow us">
+          {social.map((link) => (
+            <li>
+              <a href={link.href} rel="me">{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      site.hours && (
+        <div class="site-footer__col">
+          <h2 class="site-footer__heading">Hours</h2>
+          <ul role="list">
+            {site.hours.map((row) => (
+              <li>
+                {row.days}, {formatTime(row.open)} to {formatTime(row.close)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    <p class="site-footer__legal soft">© {year} Dear Sofia</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-2xl) var(--space-l);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  .site-footer__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+  }
+
+  .wordmark {
+    font-size: 30px;
+    text-decoration: none;
+  }
+
+  .site-footer__col ul,
+  ul.site-footer__col {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .site-footer__col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .site-footer__col a:hover {
+    text-decoration: underline;
+  }
+
+  .site-footer__heading {
+    margin-bottom: var(--space-2xs);
+    font-size: var(--text-body);
+    font-weight: 700;
+    font-variation-settings: 'opsz' 18;
+    letter-spacing: 0;
+  }
+
+  .site-footer__legal {
+    font-size: var(--text-small);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__inner {
+      grid-template-columns: 2fr repeat(3, 1fr);
+      align-items: start;
+    }
+
+    .site-footer__legal {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
